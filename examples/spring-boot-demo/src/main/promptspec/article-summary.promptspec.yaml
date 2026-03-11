@@ -1,0 +1,19 @@
+apiVersion: promptspec/v1alpha1
+prompts:
+  - id: article.summary
+    version: 1.0.0
+    template:
+      inline: "Summarize {article} using {format}"
+    variables:
+      - name: article
+        type: string
+    output:
+      mode: java-type
+      javaType: java.lang.String
+    tools:
+      - name: weather.lookup
+    tests:
+      - name: simple-summary
+        inputs:
+          article: "PromptSpec-J turns prompts into contracts."
+        snapshot: article-summary-simple

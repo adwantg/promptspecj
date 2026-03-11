@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://promptspecj.io/schema/promptspec-v1alpha1.schema.json",
+  "title": "PromptSpec v1alpha1",
+  "type": "object",
+  "required": [
+    "apiVersion",
+    "prompts"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "const": "promptspec/v1alpha1"
+    },
+    "prompts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/prompt"
+      }
+    }
+  },
+  "$defs": {
+    "prompt": {
+      "type": "object",
+      "required": [
+        "id",
+        "version",
+        "template",
+        "variables",
+        "output"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9._-]+$"
+        },
+        "version": {
+          "type": "string"
+        },
+        "template": {
+          "$ref": "#/$defs/template"
+        },
+        "variables": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/variable"
+          }
+        },
+        "output": {
+          "$ref": "#/$defs/output"
+        },
+        "tools": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/tool"
+          }
+        },
+        "tests": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/test"
+          }
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "template": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "inline": {
+          "type": "string"
+        },
+        "resource": {
+          "type": "string"
+        }
+      },
+      "oneOf": [
+        { "required": ["inline"] },
+        { "required": ["resource"] }
+      ]
+    },
+    "variable": {
+      "type": "object",
+      "required": [
+        "name",
+        "type"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["string", "int", "long", "boolean", "number", "enum"]
+        },
+        "required": {
+          "type": "boolean",
+          "default": true
+        },
+        "defaultValue": {
+          "type": ["string", "number", "boolean", "null"]
+        },
+        "constraints": {
+          "type": "object",
+          "additionalProperties": {
+            "type": ["string", "number", "boolean"]
+          }
+        },
+        "allowedValues": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "required": ["mode"],
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["text", "json-schema", "java-type"]
+        },
+        "javaType": {
+          "type": "string"
+        },
+        "jsonSchema": {}
+      }
+    },
+    "tool": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9._-]+$"
+        }
+      }
+    },
+    "test": {
+      "type": "object",
+      "required": [
+        "name",
+        "inputs",
+        "snapshot"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "inputs": {
+          "type": "object",
+          "additionalProperties": {
+            "type": ["string", "number", "boolean", "null"]
+          }
+        },
+        "snapshot": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
