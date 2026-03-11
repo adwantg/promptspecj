@@ -6,4 +6,4 @@
 4. Inject the generated Spring AI client into your service.
 5. Record snapshots locally and replay them in CI.
 
-The sample app under [examples/spring-boot-demo](/Users/goutamadwant/Documents/OpenSource/JavaProjects/PromptSpecJ/examples/spring-boot-demo) demonstrates the full flow.
+The sample app under [examples/spring-boot-demo](../examples/spring-boot-demo) demonstrates the full flow.

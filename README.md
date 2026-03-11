@@ -217,13 +217,13 @@ The generated client delegates to Spring AI runtime primitives instead of invent
 5. Use the generated client and metadata types in your application.
 6. Add snapshot tests for replayable CI drift detection.
 
-The root repo tasks also validate and generate against the sample project in [examples/spring-boot-demo](/Users/goutamadwant/Documents/OpenSource/JavaProjects/PromptSpecJ/examples/spring-boot-demo).
+The root repo tasks also validate and generate against the sample project in [examples/spring-boot-demo](./examples/spring-boot-demo).
 
 ## Documentation
 
-- [Getting Started](/Users/goutamadwant/Documents/OpenSource/JavaProjects/PromptSpecJ/docs/getting-started.md)
-- [PromptSpec Schema](/Users/goutamadwant/Documents/OpenSource/JavaProjects/PromptSpecJ/docs/schema/promptspec-v1alpha1.schema.json)
-- [Roadmap](/Users/goutamadwant/Documents/OpenSource/JavaProjects/PromptSpecJ/docs/roadmap.md)
+- [Getting Started](./docs/getting-started.md)
+- [PromptSpec Schema](./docs/schema/promptspec-v1alpha1.schema.json)
+- [Roadmap](./docs/roadmap.md)
 
 ## Current scope
 
