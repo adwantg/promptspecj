@@ -13,7 +13,7 @@ plugins {
     alias(libs.plugins.spotless) apply false
 }
 
-group = "io.promptspecj"
+group = "io.github.adwantg"
 version = providers.gradleProperty("projectVersion").getOrElse("0.1.0-SNAPSHOT")
 
 allprojects {
@@ -69,7 +69,7 @@ subprojects {
                     pom {
                         name.set(project.name)
                         description.set("PromptSpec-J module ${project.name}")
-                        url.set("https://github.com/promptspecj/promptspecj")
+                        url.set("https://github.com/adwantg/promptspecj")
                         licenses {
                             license {
                                 name.set("The Apache License, Version 2.0")
@@ -77,9 +77,9 @@ subprojects {
                             }
                         }
                         scm {
-                            connection.set("scm:git:https://github.com/promptspecj/promptspecj.git")
-                            developerConnection.set("scm:git:ssh://git@github.com:promptspecj/promptspecj.git")
-                            url.set("https://github.com/promptspecj/promptspecj")
+                            connection.set("scm:git:https://github.com/adwantg/promptspecj.git")
+                            developerConnection.set("scm:git:ssh://git@github.com:adwantg/promptspecj.git")
+                            url.set("https://github.com/adwantg/promptspecj")
                         }
                     }
                 }
@@ -103,7 +103,7 @@ jreleaser {
     project {
         name.set("PromptSpec-J")
         description.set("OpenAPI-style prompt contracts for Java and Spring AI.")
-        website.set("https://github.com/promptspecj/promptspecj")
+        website.set("https://github.com/adwantg/promptspecj")
         authors.set(listOf("PromptSpec-J contributors"))
         license.set("Apache-2.0")
         copyright.set("2026")
@@ -116,7 +116,7 @@ jreleaser {
         github {
             enabled.set(true)
             overwrite.set(false)
-            repoOwner.set("promptspecj")
+            repoOwner.set("adwantg")
             name.set("promptspecj")
             tagName.set("v{{projectVersion}}")
             skipTag.set(false)
