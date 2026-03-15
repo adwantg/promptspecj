@@ -10,7 +10,6 @@ import org.gradle.plugins.signing.SigningExtension
 plugins {
     base
     alias(libs.plugins.jreleaser)
-    alias(libs.plugins.nexusPublish)
     alias(libs.plugins.spotless) apply false
 }
 
@@ -29,6 +28,10 @@ subprojects {
         apply(plugin = "signing")
         apply(plugin = "jacoco")
         apply(plugin = "com.diffplug.spotless")
+
+        val signingKey = providers.environmentVariable("JRELEASER_GPG_SECRET_KEY").orNull
+        val signingPassphrase = providers.environmentVariable("JRELEASER_GPG_PASSPHRASE").orNull
+        val hasSigningCredentials = !signingKey.isNullOrBlank() && !signingPassphrase.isNullOrBlank()
 
         extensions.configure<JavaPluginExtension> {
             toolchain {
@@ -64,6 +67,12 @@ subprojects {
         }
 
         extensions.configure<PublishingExtension> {
+            repositories {
+                maven {
+                    name = "staging"
+                    url = uri(rootProject.layout.buildDirectory.dir("staging-deploy"))
+                }
+            }
             publications {
                 if (project.path != ":promptspec-gradle-plugin") {
                     create<MavenPublication>("mavenJava") {
@@ -93,10 +102,7 @@ subprojects {
         }
 
         extensions.configure<SigningExtension> {
-            val signingKey = providers.environmentVariable("JRELEASER_GPG_SECRET_KEY").orNull
-            val signingPassphrase = providers.environmentVariable("JRELEASER_GPG_PASSPHRASE").orNull
-
-            if (!signingKey.isNullOrBlank() && !signingPassphrase.isNullOrBlank()) {
+            if (hasSigningCredentials) {
                 useInMemoryPgpKeys(signingKey, signingPassphrase)
             }
 
@@ -104,23 +110,10 @@ subprojects {
         }
 
         tasks.withType<Sign>().configureEach {
-            val signingKeyPresent = !providers.environmentVariable("JRELEASER_GPG_SECRET_KEY")
-                .orNull
-                .isNullOrBlank()
-            val publishingToMavenLocal = gradle.startParameter.taskNames.any { taskName ->
-                taskName.contains("publishToMavenLocal")
-            }
-
             onlyIf {
-                signingKeyPresent || !publishingToMavenLocal
+                hasSigningCredentials
             }
         }
-    }
-}
-
-nexusPublishing {
-    repositories {
-        sonatype()
     }
 }
 

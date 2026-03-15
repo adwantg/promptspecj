@@ -14,7 +14,7 @@ dependencies {
 gradlePlugin {
     plugins {
         create("promptspec") {
-            id = "io.promptspecj.gradle"
+            id = "io.github.adwantg.promptspec"
             implementationClass = "io.promptspecj.gradle.PromptSpecGradlePlugin"
             displayName = "PromptSpec-J Gradle Plugin"
             description = "Validates and generates PromptSpec contracts."
