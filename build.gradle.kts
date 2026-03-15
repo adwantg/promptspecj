@@ -3,6 +3,7 @@ import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
+import org.gradle.plugins.signing.Sign
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.plugins.signing.SigningExtension
 
@@ -22,7 +23,7 @@ allprojects {
 }
 
 subprojects {
-    if (path != ":docs" && path != ":examples:spring-boot-demo") {
+    if (path != ":docs" && path != ":examples" && path != ":examples:spring-boot-demo") {
         apply(plugin = "java-library")
         apply(plugin = "maven-publish")
         apply(plugin = "signing")
@@ -64,8 +65,13 @@ subprojects {
 
         extensions.configure<PublishingExtension> {
             publications {
-                create<MavenPublication>("mavenJava") {
-                    from(components["java"])
+                if (project.path != ":promptspec-gradle-plugin") {
+                    create<MavenPublication>("mavenJava") {
+                        from(components["java"])
+                    }
+                }
+
+                withType<MavenPublication>().configureEach {
                     pom {
                         name.set(project.name)
                         description.set("PromptSpec-J module ${project.name}")
@@ -87,8 +93,27 @@ subprojects {
         }
 
         extensions.configure<SigningExtension> {
-            useGpgCmd()
-            sign(extensions.getByType(PublishingExtension::class.java).publications["mavenJava"])
+            val signingKey = providers.environmentVariable("JRELEASER_GPG_SECRET_KEY").orNull
+            val signingPassphrase = providers.environmentVariable("JRELEASER_GPG_PASSPHRASE").orNull
+
+            if (!signingKey.isNullOrBlank() && !signingPassphrase.isNullOrBlank()) {
+                useInMemoryPgpKeys(signingKey, signingPassphrase)
+            }
+
+            sign(extensions.getByType(PublishingExtension::class.java).publications)
+        }
+
+        tasks.withType<Sign>().configureEach {
+            val signingKeyPresent = !providers.environmentVariable("JRELEASER_GPG_SECRET_KEY")
+                .orNull
+                .isNullOrBlank()
+            val publishingToMavenLocal = gradle.startParameter.taskNames.any { taskName ->
+                taskName.contains("publishToMavenLocal")
+            }
+
+            onlyIf {
+                signingKeyPresent || !publishingToMavenLocal
+            }
         }
     }
 }
