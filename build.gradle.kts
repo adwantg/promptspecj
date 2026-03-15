@@ -96,6 +96,13 @@ subprojects {
                             developerConnection.set("scm:git:ssh://git@github.com:adwantg/promptspecj.git")
                             url.set("https://github.com/adwantg/promptspecj")
                         }
+                        developers {
+                            developer {
+                                id.set("adwantg")
+                                name.set("adwantg")
+                                url.set("https://github.com/adwantg")
+                            }
+                        }
                     }
                 }
             }
