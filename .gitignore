@@ -27,3 +27,6 @@ docs/marketing-plan.md
 docs/open-source-launch-checklist.md
 docs/opensourcing-guide.md
 docs/testing-guide.md
+docs/internal-release-automation.md
+docs/maven-central-smoke-test.md
+scripts/internal-release-java-component.sh
